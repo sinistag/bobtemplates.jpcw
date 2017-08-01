@@ -112,6 +112,20 @@ class Basic_NamespaceTest(TestCase):
         self.assertFalse(os.path.exists('%s/%s' % (self.target_dir,
                                         'docs/LICENSE.GPL')))
 
+
+class valid_urlTest(TestCase):
+    def call_FUT(self, answer, configurator=None, question=None):
+        from ..hooks import valid_url
+        return valid_url(DummyConfigurator(), question, answer)
+
+    def test_url(self):
+        self.assertTrue(self.call_FUT("https://example.com/"))
+
+    def test_url_wrong_input(self):
+        from mrbob.bobexceptions import ValidationError
+        self.assertRaises(ValidationError, self.call_FUT, 'foo')
+
+
 class valid_pkg_licenseTest(TestCase):
 
     def call_FUT(self, answer, configurator=None, question=None):

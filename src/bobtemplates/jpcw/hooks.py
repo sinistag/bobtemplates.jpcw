@@ -8,6 +8,7 @@ __docformat__ = 'restructuredtext en'
 
 
 import os
+import re
 from mrbob.bobexceptions import ValidationError
 from datetime import date
 
@@ -24,6 +25,14 @@ def basicnamespace_pre_pkg_project(configurator, question):
     names = configurator.target_directory.split(os.sep)[-1].split('.')
     if len(names) == 2:
         question.default = names[1]
+
+
+def valid_url(configurator, question, answer):
+    """Check home page uri"""
+    regex = re.compile("(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?$")
+    if not regex.match(answer):
+        raise ValidationError("Not a valid URI")
+    return answer
 
 
 def valid_pkg_license(configurator, question, answer):
